@@ -20,6 +20,7 @@ namespace AigisProjekt
             var host = CreateHostBuilder(args).Build();
 
             CreateDbIfNotExists(host);
+            //adfvad
 
             host.Run();
         }
