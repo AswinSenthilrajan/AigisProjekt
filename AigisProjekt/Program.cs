@@ -22,7 +22,6 @@ namespace AigisProjekt
             CreateDbIfNotExists(host);
 
             host.Run();
-            //CreateHostBuilder(args).Build().Run();
         }
 
         private static void CreateDbIfNotExists(IHost host)
