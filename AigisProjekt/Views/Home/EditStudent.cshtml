@@ -1,6 +1,9 @@
-﻿@model List<AigisProjekt.Data.Student>
+﻿@model AigisProjekt.Data.Student
+
+
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Edit";
+    var student = Model;
 }
 
 
@@ -36,14 +39,7 @@
     <link rel="icon" href="/docs/4.5/assets/img/favicons/favicon.ico">
     <meta name="msapplication-config" content="/docs/4.5/assets/img/favicons/browserconfig.xml">
     <meta name="theme-color" content="#563d7c">
-    <script>
-        function deleteStudent(id) {
-            var r = confirm("Are You sure?");
-            if (r == true) {
-                location.href = "@Url.ActionLink("DeleteStudent", "Home")"+ "/"+ id;
-            }
-        }
-    </script>
+
 
     <style>
         .bd-placeholder-img {
@@ -69,30 +65,53 @@
     </nav>
 
     <main role="main" class="container">
-        <div class="starter-template">
-            <h1>Overview</h1>
+        <div>
+            <h1>Edit</h1>
             <hr />
-            @Html.ActionLink("createNew", "EditStudent", "Home", new { id = 0 }, null)
-            <table border="1" width="100%">
-                <tr id="table">
-                    <th>ID</th>
-                    <th>Student</th>
-                    <th>Grade &empty;</th>
-                    <th>Options</th>
-                </tr>
-                @foreach (var student in Model)
-                {
 
-                    <tr id="table">
-                        <td>@student.Id</td>
-                        <td>@student.FullName</td>
-                        <td>
-                            <button onclick="deleteStudent(@student.Id)">delete</button>
-                        </td>
-                        <td>@Html.ActionLink("edit", "EditStudent", "Home", new { id = student.Id }, null)</td>
-                    </tr>
-                }
+            @using (Html.BeginForm("SaveStudent", "Home", FormMethod.Post))
+            {
+                @Html.HiddenFor(m=> m.Id)
+                <label for="fname">Prename:</label><br>
+                @Html.TextBoxFor(m => m.Name)
+                <label for="fname">Name:</label><br>
+                
+                @Html.TextBoxFor(m => m.Prename)
+                <label for="fname">Grade: (type the marks separated by ",")</label><br>
+                <input onkeyup="calculateAverage()" type="text" id="gradesInput" name="fname" value="">
+
+                <div id="average"></div>
+
+                <label for="lname">Birthday:</label><br>
+                <input type="month" id="bdaymonth" name="bdaymonth">
+
+                <br />
+                <br />
+
+                <input type="submit" value="Submit" onclick="storeNames()">
+            }
         </div>
+
+        <script>
+            function calculateAverage() {
+                var gradeString = document.getElementById("gradesInput").value;
+                if (gradeString && gradeString.trim() != "") {
+                    var grades = gradeString.split(",");
+                    var tot = 0;
+                    var amout = 0;
+                    grades.forEach(grade => { if (grade && grade !== "") { tot += parseFloat(grade); amout++ }});
+                    tot = tot / amout;
+                    console.log(tot);
+                    console.log("Grades", grades);
+                    document.getElementById("average").innerHTML = tot;
+                } else {
+                    document.getElementById("average").innerHTML = "";
+                }
+
+                
+            }
+
+        </script>
 
     </main><!-- /.container -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

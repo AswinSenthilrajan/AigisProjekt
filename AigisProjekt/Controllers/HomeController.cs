@@ -25,32 +25,50 @@ namespace AigisProjekt.Controllers
 
         public IActionResult Index()
         {
-            
-                // Create and save a new Blog.InvalidOperationException: "No database provider has been configured for this DbContext. 
-                Console.Write("Enter a name for a Markmanagement System ");
-                var name = "Peter";
-
-                var stud = new Student { Name = name };
-                _context.Student.Add(stud);
-            _context.SaveChanges();
-
-                // Display all Blogs from the database
-                var query = from b in _context.Student
-                            orderby b.Name
-                            select b;
-
-                Console.WriteLine("All blogs in the database:");
-                foreach (var item in query)
-                {
-                    Console.WriteLine(item.Name);
-                }
-
-                Console.WriteLine("Press any key to exit...");
-                Console.ReadKey();
-            
-
-            return View();
+            var data = _context.Student.ToList();
+            return View(data);
         }
+
+
+        public IActionResult EditStudent(int id) {
+            var student = id == 0 ? new Student() { Id = 0 }:  _context.Student.Find(id);
+            return View(student);
+        }
+        /// <summary>
+        /// Updates Server
+        /// </summary>
+        /// <param name="student"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult SaveStudent(Student student)
+        {
+            if (student.Id == 0)
+            {
+                var serverStud = new Student();
+                serverStud.Name = student.Name;
+                serverStud.Prename = student.Prename;
+                _context.Student.Add(serverStud);
+                _context.SaveChanges();
+            }
+            else
+            {
+                var serverStud = _context.Student.Find(student.Id);
+                serverStud.Name = student.Name;
+                serverStud.Prename = student.Prename;
+                _context.SaveChanges();
+            }
+            return RedirectToAction("Index","Home");
+        }
+
+        public IActionResult DeleteStudent(int id)
+        {
+            var student = _context.Student.Find(id);
+            _context.Student.Remove(student);
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Home");
+        }
+
+
 
         public IActionResult Privacy()
         {
@@ -62,7 +80,6 @@ namespace AigisProjekt.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
 
     }
 }

@@ -16,12 +16,10 @@ namespace AigisProjekt
     {
         public static void Main(string[] args)
         {
-
             var host = CreateHostBuilder(args).Build();
 
             CreateDbIfNotExists(host);
             //adfvad
-
             host.Run();
         }
 

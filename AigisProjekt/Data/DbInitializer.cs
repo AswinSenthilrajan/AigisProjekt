@@ -43,7 +43,6 @@ namespace AigisProjekt.Data
                 context.Subject.Add(subj);
             }
             context.SaveChanges();
-
             //---------------------------------------------
             var marks = new Mark[]
             {
@@ -57,7 +56,6 @@ namespace AigisProjekt.Data
                 context.Mark.Add(m);
             }
             context.SaveChanges();
-
         }
     }
 }
